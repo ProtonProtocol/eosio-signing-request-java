@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 
 def LIB_GROUP_ID = 'com.greymass'
 def LIB_ARTIFACT_ID = 'esrsdk'
-def LIB_VERSION = '1.0.0'
+def LIB_VERSION = '1.0.4'
 
 task sourceJar(type: Jar) {
 	from android.sourceSets.main.java.srcDirs
@@ -44,6 +44,16 @@ publishing {
 					dependencyNode.appendNode('groupId', it.group)
 					dependencyNode.appendNode('artifactId', it.name)
 					dependencyNode.appendNode('version', it.version)
+					dependencyNode.appendNode('scope', 'runtime')
+
+					if (it.group == 'com.eclipsesource.j2v8'){
+						dependencyNode.appendNode('type', 'aar')
+
+						def exclusionsNode = dependencyNode.appendNode('exclusions')
+						def exclusionNode = exclusionsNode.appendNode('exclusion')
+						exclusionNode.appendNode('artifactId', '*')
+						exclusionNode.appendNode('groupId', '*')
+					}
 				}
 			}
 		}
